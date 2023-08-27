@@ -40,6 +40,19 @@ function App() {
 
   return (
     <div className="App">
+      <div className="top-bar">
+        <div className="top-bar-left">
+          <button className="top-bar-button">Free Delivery</button>
+          <button className="top-bar-button">Log In</button>
+          <button className="top-bar-button">Sign Up</button>
+        </div>
+        <div className="top-bar-right">
+          <span className="follow-us">Follow Us:</span>
+          <a href="#" className="follow-us-link">Facebook</a>
+          <a href="#" className="follow-us-link">Twitter</a>
+          <a href="#" className="follow-us-link">Instagram</a>
+        </div>
+      </div>
        <nav>
         <ul className="navbar">
           {navbar.map((item) => (
