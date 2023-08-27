@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
+const categories = ["electronics", "jewelery", "men's clothing", "women's clothing"];
 const navbar = [
   { name: 'Home', id: 'home' },
   { name: 'About', id: 'about' },
@@ -8,14 +9,42 @@ const navbar = [
     name: 'Our Products',
     id: 'product',
     child: [
-      { name: 'FLORIDA JACKET', image: 'Product 1.png', id: 'p1' },
-      { name: 'FLORIDA JACKET', id: 'p2' },
-      { name: 'FLORIDA JACKET', id: 'p3' },
-      { name: 'FLORIDA JACKET', id: 'p4' },
+      ...categories.map((category) => ({
+        name: category,
+        id: category,
+      })),
     ],
   },
   { name: 'Contact Us', id: 'contact' },
 ];
+
+function ProductListings({ category }) {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch(`https://fakestoreapi.com/products/category/${category}`)
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data); // Store the fetched data in state
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, [category]);
+
+  return (
+    <div className="product-list">
+      {products.map((product) => (
+        <div className="product-item" key={product.id}>
+          <img src={product.image} alt={product.title} />
+          <h3>{product.title}</h3>
+          <p>{product.description}</p>
+          <p>Price: ${product.price}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function App() {
   const [formData, setFormData] = useState({
@@ -81,11 +110,9 @@ function App() {
   <h2>Our Products</h2>
   <div className="product-list">
     {navbar.find((item) => item.id === 'product')?.child?.map((product) => (
-      <div className="product-item" key={product.id}>
-        <img src={`/Product%201.png`} alt={product.name} />
-        <h3>{product.name}</h3>
-        <p>Suffered Alteration in some form.</p>
-        <p>Price: $100</p>
+      <div className="product-category" key={product.id}>
+        <h2>{product.name}</h2>
+        <ProductListings category={product.id} />
       </div>
     ))}
   </div>
